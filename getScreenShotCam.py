@@ -20,6 +20,9 @@ if not os.path.exists("SessionCapture"):
 # Flag to track if a screenshot has been taken
 screenshot_taken = False
 
+# List to store the images of detected people
+person_images = []
+
 while True:
     ret, frame = cap.read()  # Capture a frame
     if not ret:
@@ -33,34 +36,21 @@ while True:
         if not screenshot_taken and pred[4] > confidence_threshold and pred[5] == 0:  # Class 0 represents a person
             screenshot_taken = True
 
-            # Take a screenshot of the frame
-            cv2.imwrite("screenshot.jpg", frame)
-
-            # Store the file path for later use
-            screenshot_file_path = "screenshot.jpg"
-
             # OpenCV's YOLOv5 model returns detected persons as a list of bounding boxes
             # You can iterate through the bounding boxes and save each person as a separate image
-            person_count = 0
             for person_bbox in results.xyxy[0]:
                 if person_bbox[4] > confidence_threshold and person_bbox[5] == 0:
                     x1, y1, x2, y2 = person_bbox[:4].int()
                     person_image = frame[y1:y2, x1:x2]
-                    person_file_path = os.path.join("SessionCapture", f"person_{person_count}.jpg")
+                    person_images.append(person_image)
+
+                    # Add print statements for debugging
+                    person_file_path = os.path.join("SessionCapture", f"person_{len(person_images)}.jpg")
                     cv2.imwrite(person_file_path, person_image)
-                    person_count += 1
-
-            # Print the file path of the main screenshot
-            print(f"File Path of the Main Screenshot: {screenshot_file_path}")
-
-            # Move the person images to the SessionCapture folder
-            for i in range(person_count):
-                person_image_path = os.path.join("SessionCapture", f"person_{i}.jpg")
-                shutil.move(person_image_path, "SessionCapture")
-                print(i)
+                    print(f"Saved person image: {person_image.shape} at {person_file_path}")
 
             # You can add additional logic here, like saving the timestamp or notifying someone
-            print("Person detected with confidence > 0.7. Screenshot taken.")
+            print("Person detected with confidence > 0.7. Images saved.")
 
     # Display the frame
     cv2.imshow('Camera Feed', frame)
