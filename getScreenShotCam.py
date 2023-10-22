@@ -5,7 +5,8 @@ import time
 import shutil
 
 # Load YOLOv5 model (you need to have YOLOv5 and its dependencies installed)
-model = torch.hub.load('ultralytics/yolov5', 'yolov5s')  # You can choose a different YOLOv5 variant (e.g., 'yolov5m', 'yolov5l', 'yolov5x')
+# You can choose a different YOLOv5 variant (e.g., 'yolov5m', 'yolov5l', 'yolov5x')
+model = torch.hub.load('ultralytics/yolov5', 'yolov5s')
 
 # Set the confidence threshold
 confidence_threshold = 0.7

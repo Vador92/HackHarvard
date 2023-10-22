@@ -32,10 +32,11 @@ def triangulateFace(image_path):
     # Convert the image to grayscale for face detection
     gray = cv2.cvtColor(face_image, cv2.COLOR_BGR2GRAY)
 
-    # Load the face detection model (for example, Haar Cascade)
-    face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+    # Specify the full path to the Haar Cascade XML file
+    cascade_path = r'C:\Users\User\PycharmProjects\HackHarvard\FaceDatabase\haarcascades\haarcascade_frontalface_default.xml'
 
     # Perform face detection
+    face_cascade = cv2.CascadeClassifier(cascade_path)
     faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
 
     if len(faces) > 0:
@@ -59,12 +60,25 @@ def triangulateFace(image_path):
             approx = cv2.approxPolyDP(contour, epsilon, True)
             vector_paths.append(approx)
 
+        # Print the vectorized paths
+        for i, path in enumerate(vector_paths):
+            print(f"Vectorized Path {i + 1}:")
+            print(path)
+
         # Now, you can perform triangulation or any other operation on vector_paths
-        triangulateFunctionGraph(ax, vector_paths)
+        triangulateFunctionGraph(ax, np.vstack(vector_paths))
         plt.show()
     else:
         print("No face detected in the image.")
 
 
+# Specify the directory where your image files are located
+image_directory = r"C:\Users\User\PycharmProjects\HackHarvard\SessionCapture"
+
 # Call triangulateFace function to perform vectorization and triangulation
-triangulateFace(image_path='')
+files = os.listdir(image_directory)
+if len(files) > 0:
+    for file_name in files:
+        image_path = os.path.join(image_directory, file_name)
+        triangulateFace(image_path)
+

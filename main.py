@@ -20,11 +20,29 @@ def main():
             os.remove(file_path)
 
     # Schedule the 'job' function to run every 60 seconds
-    schedule.every(60).seconds.do(job)
+    schedule.every(10).seconds.do(job)
 
     while True:
         schedule.run_pending()
         time.sleep(1)
+    import os
 
-if __name__ == "__main__":
+    # Directory where images are stored
+    image_directory = "SessionCapture"
+
+    # Check if the directory exists
+    if os.path.exists(image_directory):
+        # List all files in the directory
+        image_files = os.listdir(image_directory)
+
+        # Loop through the files and delete them
+        for file_name in image_files:
+            file_path = os.path.join(image_directory, file_name)
+            os.remove(file_path)
+        print("Previously captured images have been deleted.")
+    else:
+        print("No previously captured images to delete.")
+
+
+if __name__ == "main":
     main()
