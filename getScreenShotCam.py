@@ -3,6 +3,7 @@ import torch
 import os
 import time
 import shutil
+import FaceDatabase.FaceTriangulate
 
 # Load YOLOv5 model (you need to have YOLOv5 and its dependencies installed)
 # You can choose a different YOLOv5 variant (e.g., 'yolov5m', 'yolov5l', 'yolov5x')

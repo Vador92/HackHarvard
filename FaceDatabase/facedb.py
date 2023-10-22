@@ -1,15 +1,15 @@
-from pymongo import MongoClient
+import weaviate
 
+auth_config = weaviate.auth.AuthApiKey(api_key="<FUx4NB4rYZO8JUH0U0q4Ni8OBAA7RKLjR83P>")
 
-#establish a connection to the datab
-client = MongoClient("localhost", 27017)
-client = MongoClient("mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000")
-
-db = client.neuraldb
-
-people = db.people
-
-people.insert_one({"name": "Mike", "age": 28})
-
-for person in people.find():
-    print(person.name)
+# Create a Weaviate client with API key authentication
+client = weaviate.Client(
+    url="https://face-detection-v8iqjrfg.weaviate.network",
+    auth_client_secret=auth_config,
+    # Add any additional headers here if needed
+    additional_headers={
+        "X-Cohere-Api-Key": "<COHERE-KEY>",
+        "X-HuggingFace-Api-Key": "<HUGGINGFACE-KEY>",
+        "X-OpenAI-Api-Key": "<OPENAI-KEY>",
+    }
+)
